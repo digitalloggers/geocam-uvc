@@ -1,0 +1,46 @@
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -129,6 +129,9 @@
+ #define UVC_GUID_FORMAT_M420 \
+ 	{ 'M',  '4',  '2',  '0', 0x00, 0x00, 0x10, 0x00, \
+ 	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
++#define UVC_GUID_FORMAT_MUX \
++	{ 'M',  'U',  'X',  0x00, 0x00, 0x00, 0x10, 0x00, \
++	 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+ 
+ #define UVC_GUID_FORMAT_H264 \
+ 	{ 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -219,6 +219,16 @@ static struct uvc_format_desc uvc_fmts[] = {
+ 		.guid		= UVC_GUID_FORMAT_CNF4,
+ 		.fcc		= V4L2_PIX_FMT_CNF4,
+ 	},
++/* definition for MUX format */
++#ifndef V4L2_PIX_FMT_MUX
++#define V4L2_PIX_FMT_MUX    v4l2_fourcc_be('M', 'U', 'X', ' ') /* MUX stream */
++#endif
++
++	{
++		.name		= "MUX",
++		.guid		= UVC_GUID_FORMAT_MUX,
++		.fcc		= V4L2_PIX_FMT_MUX,
++	},
+ };
+ 
+ /* ------------------------------------------------------------------------
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1255,6 +1255,12 @@
+ 		switch (fmt->pixelformat) {
+ 		/* Max description length mask:	descr = "0123456789012345678901234567890" */
+ 		case V4L2_PIX_FMT_MJPEG:	descr = "Motion-JPEG"; break;
++/* definition for MUX format */
++#ifndef V4L2_PIX_FMT_MUX
++#define V4L2_PIX_FMT_MUX    v4l2_fourcc_be('M', 'U', 'X', ' ') /* MUX stream */
++#endif
++
++		case V4L2_PIX_FMT_MUX:		descr = "MUX -BE"; break;
+ 		case V4L2_PIX_FMT_JPEG:		descr = "JFIF JPEG"; break;
+ 		case V4L2_PIX_FMT_DV:		descr = "1394"; break;
+ 		case V4L2_PIX_FMT_MPEG:		descr = "MPEG-1/2/4"; break;

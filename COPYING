@@ -1,0 +1,5 @@
+This kernel patch, likewise to the Linux kernel, is provided under:
+
+SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
+
+See LICENSES/preferred/GPL-2.0, LICENSES/exceptions/Linux-syscall-note for details.
